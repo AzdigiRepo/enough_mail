@@ -95,6 +95,35 @@ class DiscoverHelper {
     return mxDomain;
   }
 
+  /// Looks up domain referenced by the domain's DNS MX record
+  static Future<String?> discoverFullMxDomain(String domain) async {
+    final mxRecords =
+    await basic.DnsUtils.lookupRecord(domain, basic.RRecordType.MX);
+    if (mxRecords == null || mxRecords.isEmpty) {
+      //print('unable to read MX records for [$domain].');
+      return null;
+    }
+    for (var mxRecord in mxRecords) {
+      if (mxRecord.data.contains("azdigimail.com")) {
+        var mxDomain = mxRecord.data;
+        final dotIndex = mxDomain.indexOf('.');
+        final spaceIndex = mxDomain.indexOf(' ');
+        if (dotIndex == -1) {
+          return null;
+        }
+        final lastDotIndex = mxDomain.lastIndexOf('.');
+        if (lastDotIndex <= dotIndex - 1) {
+          return null;
+        }
+        //todo get full mx record
+        mxDomain = mxDomain.substring(spaceIndex + 1, lastDotIndex);
+        return mxDomain;
+      }
+    }
+    return null;
+  }
+
+
   /// Automatically discovers mail configuration from Mozilla ISP DB
   ///
   /// Compare: https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Autoconfiguration

@@ -134,6 +134,11 @@ class Discover {
     return _updateDisplayNames(config, emailDomain);
   }
 
+  static Future<String?> getMXDomainFromEmail(String email) async {
+    var mxDomain = await DiscoverHelper.discoverFullMxDomain(DiscoverHelper.getDomainFromEmail(email));
+    return mxDomain;
+  }
+
   static ClientConfig? _updateDisplayNames(
       ClientConfig? config, String mailDomain) {
     final emailProviders = config?.emailProviders;

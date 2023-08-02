@@ -103,9 +103,9 @@ class DiscoverHelper {
       //print('unable to read MX records for [$domain].');
       return null;
     }
-    for (var mxRecord in mxRecords) {
-      if (mxRecord.data.contains("azdigimail.com")) {
-        var mxDomain = mxRecord.data;
+    // for (var mxRecord in mxRecords) {
+    //   if (mxRecord.data.contains("azdigimail.com")) {
+        var mxDomain = mxRecords.first.data;
         final dotIndex = mxDomain.indexOf('.');
         final spaceIndex = mxDomain.indexOf(' ');
         if (dotIndex == -1) {
@@ -118,8 +118,8 @@ class DiscoverHelper {
         //todo get full mx record
         mxDomain = mxDomain.substring(spaceIndex + 1, lastDotIndex);
         return mxDomain;
-      }
-    }
+    //   }
+    // }
     return null;
   }
 
